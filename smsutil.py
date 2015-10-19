@@ -83,7 +83,7 @@ def getSMSinboxList():
     for f in files:
         absFile.append(os.path.join(inbox, f))
     
-    absFile.sort()
+    # absFile.sort()
     return(absFile)   
 
 
@@ -100,14 +100,15 @@ def main():
         try:
             text = getSMSFromFile(f)
             print(text)
+            logging.info(f)
             logging.info('\n' + text)
         except Exception as e:
             print('error while getting %s. %s' %(f, e))
             logging.debug('error while getting %s. %s' %(f, e))
             exit(1)
-    sendSmsTelegram(text)
+        sendSmsTelegram(text)
      
-    moveToArchieve(f)
+        moveToArchieve(f)
 
 
 def loop(break_time):
