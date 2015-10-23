@@ -91,7 +91,7 @@ def main():
     inboxFiles = getSMSinboxList()    
 
     if not inboxFiles:
-        print('No new messages', end='\r')
+        # print('No new messages', end='\r')
         return
 
     logging.debug('Message in inbox' + str(inboxFiles))
