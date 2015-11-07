@@ -70,8 +70,16 @@ def getTimeSender(file):
     return (date_time, sender)
 
 def moveToArchieve(file):
-    # move file to 'archieve'
     path_archieve = '/var/spool/gammu/archieve'
+    # check if file is already exists
+    file_base_name = os.path.basename(file)
+    file_archieve = os.path.join(path_archieve, file_base_name)
+
+    # if already exists remove file
+    if os.path.exists(file_archieve):
+        os.remove(file_archieve)
+
+    # move file to 'archieve'
     shutil.move(file, path_archieve)
     
 def getSMSinboxList():
