@@ -111,8 +111,10 @@ def main():
             logging.info(f)
             logging.info('\n' + text)
         except Exception as e:
-            print('error while getting %s. %s' %(f, e))
-            logging.debug('error while getting %s. %s' %(f, e))
+            err_info = 'error while getting %s. %s'%(f, e)
+            print(err_info)
+            logging.debug(err_info)
+            sendSmsTelegram(err_info)
             exit(1)
         sendSmsTelegram(text)
      
