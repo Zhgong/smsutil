@@ -52,10 +52,8 @@ def getSMSFromFile(file):
 
 def sendSmsTelegram(text):
     # send text to telegram
-    # token='131526065:AAH6BBSGT3D_vs6lquEputla7jAQZIE9Dks'
     token = config.TOKEN
     bot = telegram.Bot(token=token)
-    # chat_id = 137656716
     chat_id = config.CHAT_ID
     bot.sendMessage(chat_id=chat_id, text=text)
     logging.debug('SMS sent to telegram')
