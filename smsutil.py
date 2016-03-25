@@ -125,6 +125,7 @@ def main():
 
 def loop(break_time):
     logging.debug('Starting main loop')
+    sendSmsTelegram('SMS service started ..')
     while True:
         main()
         time.sleep(break_time)
