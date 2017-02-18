@@ -9,7 +9,7 @@
 # Description:       This service is used to manage a servo
 ### END INIT INFO
 
-DIR=/home/osmc/smsutil
+DIR=/home/pi/smsutil
 SCRIPT=smsutil.py
 DAEMON=$DIR/$SCRIPT
 DAEMON_NAME=smsutil
