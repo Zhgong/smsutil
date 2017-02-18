@@ -2,80 +2,106 @@
 from __future__ import print_function
 import os
 import sys
-import telegram
 import logging
 import re
 import shutil
 import time
 
-import config # import config file
+class SMS_CHECKER:
+    def __init__(self):
+        self.inbox_files = []
+        self.sms = []
 
-from sms_chcker import SMS_CHECKER
+    def _get_sms_inbox_list(self):
+        inbox = '/var/spool/gammu/inbox/'
+        files = os.listdir(inbox)
+        files.sort()
+        absFile = []
+
+        # todo refactor with []
+        for f in files:
+            absFile.append(os.path.join(inbox, f))
+
+        self.inbox_files = absFile.copy()
+        self.inbox_files.sort()
+
+    def _move_to_archieve(self, file):
+        path_archieve = '/var/spool/gammu/archieve'
+        # check if file is already exists
+        file_base_name = os.path.basename(file)
+        file_archieve = os.path.join(path_archieve, file_base_name)
+
+        # if already exists remove file
+        if os.path.exists(file_archieve):
+            os.remove(file_archieve)
+
+        # move file to 'archieve'
+        shutil.move(file, path_archieve)
+
+    def get_sms(self):
+        self._get_sms_inbox_list()
+
+        if not self.inbox_files:
+            return []
+
+        tmp_sms = dict()
+        for f in self.inbox_files:
+            tmp_sms['file'] = f
+            tmp_sms['text'] = getSMSFromFile(f)
+            self.sms.append(f)
+
+        return self.sms
+
+    def archieve(self,sms_list=[]):
+        files = [i.get('file', '') for i in sms_list]
+
+        if not files:
+            return
+
+        for f in files:
+            self._move_to_archieve(f)
 
 
-# Copied from antoher as template, needs to be adapted
-def logging_config(loggingfile):
-    # configure logging, log data will be store with the same name.log under the same folder.
+def getSMSFromFile(file):
+    # output:
+    # 时间: 2015.10.10 09:01:33
+    # 来自: 10010
+    # 温馨提示：截止北京时间10月09日24时，您当日使用的国际漫游数据流量0.29MB、费用5.00元，本月累计使用国际漫游数据流量0
 
-    FORMAT = '%(asctime)-15s %(name)s %(levelname)s: %(message)s'
-    # logging.basicConfig(level=logging.INFO,filename=loggingfile, format=FORMAT)
-    if loggingfile:
-        logging.basicConfig(level=logging.DEBUG, filename=loggingfile, format=FORMAT)
-        print('Logging file for is: %s' % loggingfile)
-    else:
-        logging.basicConfig(level=logging.DEBUG, format=FORMAT)
+    sms = ''
+    encoding = 'utf-16'
+    # get time stamp and sender
+    try:
+        date_time, sender = getTimeSender(file)
+        sms = '时间: ' + date_time + '\n'
+        sms = sms + '来自: ' + sender + '\n'
+    except Exception as e:
+        logging.debug('Error while getting time and sender: %s' % e)
+        exit(1)
 
+    # open file with 'utf-16' encoding
+    logging.debug('Opening file with %s format.' % encoding)
 
-def sendSmsTelegram(text):
-    # send text to telegram
-    token = config.TOKEN
-    bot = telegram.Bot(token=token)
-    chat_id = config.CHAT_ID
-    bot.sendMessage(chat_id=chat_id, text=text)
-    logging.debug('SMS sent to telegram')
-
-def main(sms_checker):
-    all_sms = sms_checker.get_sms()
-
-    if not all_sms:
-        # print('No new messages', end='\r')
-        return
-
-    logging.debug('Message in inbox' + str([s.get('text') for s in all_sms]))
-
-    sent_sms = []
-    for s in all_sms:
-        try:
-            text = s.get('text', '')
-            print(text)
-            logging.info(s.get('file'), '')
-            logging.info('\n' + text)
-        except Exception as e:
-            err_info = 'error while getting %s. %s'%(f, e)
-            print(err_info)
-            logging.debug(err_info)
-            sendSmsTelegram(err_info)
-            exit(1)
-        sendSmsTelegram(text)
-
-        sent_sms.append(s)
-    sms_checker.archieve(sent_sms)
+    with open(file, encoding=encoding) as f:
+        text = f.readlines()
+    sms += "".join(text)
+    return sms
 
 
-def loop(break_time):
-    logging.debug('Starting main loop')
-    sendSmsTelegram('SMS service started ..')
-    sms_checker = SMS_CHECKER()
-    while True:
-        main(sms_checker)
-        time.sleep(break_time)
+def getTimeSender(file):
+    # 'IN20151010_090133_00_10010_00.txt' --> ('2015.10.10 09:01:33', '10010')
+    timeSenderRegx = re.compile(r'IN(\d{4})(\d{2})(\d{2})_(\d{2})(\d{2})(\d{2})_\d{2}_(.*)_\d{2}')
+    mo = timeSenderRegx.search(file)
+    res = mo.groups()
+    date = ".".join(res[0:3])
+    time = ":".join(res[3:6])
+    date_time = '%s %s' % (date, time)
+
+    sender = res[6]
+    return (date_time, sender)
 
 if __name__ == '__main__':
-    if len(sys.argv) == 2:
-        loggingfile = sys.argv[1]
-    else:
-        loggingfile = ''
-    logging_config(loggingfile)
-    logging.debug('Script: %s init finished'% sys.argv[0])
-    loop(2)
+    sms = SMS()
+    all_sms = sms.get_sms()
+    sms.archieve(all_sms)
 
