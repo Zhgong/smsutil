@@ -1,39 +1,38 @@
 #!/usr/bin/python3
 from __future__ import print_function
 import os
-import sys
 import logging
 import re
 import shutil
-import time
+
 
 class SMS_CHECKER:
     def __init__(self):
         self.inbox_files = []
         self.sms = []
+        self.inbox = '/var/spool/gammu/inbox/'
+        self.path_archieve = '/var/spool/gammu/archieve'
 
     def _get_sms_inbox_list(self):
-        inbox = '/var/spool/gammu/inbox/'
-        files = os.listdir(inbox)
+        files = os.listdir(self.inbox)
         files.sort()
 
-        abs_files = [os.path.join(inbox, f) for f in files]
+        abs_files = [os.path.join(self.inbox, f) for f in files]
 
         self.inbox_files = abs_files.copy()
         self.inbox_files.sort()
 
     def _move_to_archieve(self, file):
-        path_archieve = '/var/spool/gammu/archieve'
         # check if file is already exists
         file_base_name = os.path.basename(file)
-        file_archieve = os.path.join(path_archieve, file_base_name)
+        file_archieve = os.path.join(self.path_archieve, file_base_name)
 
         # if already exists remove file
         if os.path.exists(file_archieve):
             os.remove(file_archieve)
 
         # move file to 'archieve'
-        shutil.move(file, path_archieve)
+        shutil.move(file, self.path_archieve)
 
     def get_sms(self):
         self._get_sms_inbox_list()
