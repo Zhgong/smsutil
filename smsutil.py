@@ -43,7 +43,7 @@ class SMS_CHECKER:
         for f in self.inbox_files:
             tmp_sms['file'] = f
             tmp_sms['text'] = get_sms_from_file(f)
-            self.sms.append(tmp_sms)
+            self.sms.append(tmp_sms.copy())
 
         return self.sms
 
@@ -97,6 +97,10 @@ def get_time_sender(file):
 
 if __name__ == '__main__':
     sms = SMS_CHECKER()
+    sms.inbox = 'inbox'
+    sms.path_archieve = 'archieve'
     all_sms = sms.get_sms()
+    for s in all_sms:
+        print(s)
     sms.archieve(all_sms)
 

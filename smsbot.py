@@ -38,17 +38,17 @@ def main(sms_checker):
         # print('No new messages', end='\r')
         return
 
-    logging.debug('Message in inbox' + str([s.get('text') for s in all_sms]))
+    logging.debug('%d Message in inbox:\n%s' %(len(all_sms), all_sms))
 
     sent_sms = []
     for s in all_sms:
         try:
             text = s.get('text', '')
             print(text)
-            logging.info(s.get('file'), '')
+            logging.info(s.get('file', ''))
             logging.info('\n' + text)
         except Exception as e:
-            err_info = 'error while getting %s. %s'%(f, e)
+            err_info = 'error while getting %s. %s'%(s, e)
             print(err_info)
             logging.debug(err_info)
             sendSmsTelegram(err_info)
