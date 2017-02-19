@@ -53,6 +53,7 @@ class SMS_CHECKER:
         if not files:
             return
 
+        logging.debug("Archieving files: %s" % files)
         for f in files:
             self._move_to_archieve(f)
 
