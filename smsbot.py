@@ -74,5 +74,5 @@ if __name__ == '__main__':
         loggingfile = ''
     logging_config(loggingfile)
     logging.debug('Script: %s init finished'% sys.argv[0])
-    loop(2)
+    loop(0.5)
 
