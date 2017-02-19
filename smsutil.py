@@ -40,6 +40,7 @@ class SMS_CHECKER:
         shutil.move(file, self.path_archieve)
 
     def get_sms(self):
+        self.sms.clear()
         self._get_sms_inbox_list()
 
         if not self.inbox_files:
