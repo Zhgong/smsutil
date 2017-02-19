@@ -8,7 +8,6 @@ import shutil
 
 class SMS_CHECKER:
     def __init__(self):
-        self.inbox_files = []
         self.sms = []
         self.inbox = '/var/spool/gammu/inbox/'
         self.path_archieve = '/var/spool/gammu/archieve'
@@ -44,7 +43,7 @@ class SMS_CHECKER:
         for f in self.inbox_files:
             tmp_sms['file'] = f
             tmp_sms['text'] = get_sms_from_file(f)
-            self.sms.append(f)
+            self.sms.append(tmp_sms)
 
         return self.sms
 
