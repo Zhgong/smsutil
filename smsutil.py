@@ -20,9 +20,15 @@ class SMS_CHECKER:
 
         self.inbox_files = abs_files.copy()
         self.inbox_files.sort()
+        if self.inbox_files:
+            logging.debug("inbox_files: %s" % self.inbox_files)
 
     def _move_to_archieve(self, file):
-        # check if file is already exists
+        if not os.path.exists(file):
+            logging.debug("file '%s' is not exists." % file)
+            return
+
+        # check if file is already exists in archieve
         file_base_name = os.path.basename(file)
         file_archieve = os.path.join(self.path_archieve, file_base_name)
 
