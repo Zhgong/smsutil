@@ -5,14 +5,14 @@ from telegram.ext import CommandHandler
 from telegram.ext import MessageHandler, Filters
 from time import sleep
 import threading
-import time
-import os
 import telegram
 import requests
 from config import TOKEN, CHAT_ID
 from sms_monitor import loop
+import sys
 
-
+# Todo: doesn't work under main function
+logging.basicConfig(format="%(asctime)-15s %(filename)s %(message)s",level=logging.DEBUG)
 
 ALLOWED_ID =CHAT_ID# chat_id of 01726060309
 
@@ -156,18 +156,22 @@ class Bot:
                 sendMsgTelegram('短信转发程序在线')
             sleep(5)
 
-def call_sms_monitor():
+if __name__ == '__main__':
+    # print("start program")
+    # if len(sys.argv) == 2:
+    #     loggingfile = sys.argv[1]
+    # else:
+    #     loggingfile = ''
+    # logging_config(loggingfile)
+
+    print("start sms_monitor_thread")
     sms_monitor_thread = threading.Thread(target=loop, args=(0.5,))  # create a new thread
     sms_monitor_thread.start()  # start the thread
-    return sms_monitor_thread
 
-if __name__ == '__main__':
-    # logging.basicConfig(format="%(asctime)-15s %(levelname)s %(filename)s %(lineno)d %(process)d %(message)s",level=logging.INFO)
-    logging.basicConfig(format="%(asctime)-15s %(filename)s %(message)s",level=logging.INFO)
-
-    sms_monitor_thread = call_sms_monitor()
-
+    print("start msg_bot")
     msg_bot = Bot(token=TOKEN)
     msg_bot.main()
 
+    print("working ...")
     sms_monitor_thread.join()
+    print("exit")
