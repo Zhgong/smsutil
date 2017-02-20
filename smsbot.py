@@ -10,6 +10,7 @@ import requests
 from config import TOKEN, CHAT_ID
 from sms_monitor import loop
 import sys
+from sysutil import get_sms_process_info
 
 # Todo: doesn't work under main function
 logging.basicConfig(format="%(asctime)-15s %(filename)s %(message)s",level=logging.INFO)
@@ -70,7 +71,7 @@ def message_reactor(bot, update):
         get_bot_name(bot, update)
 
     elif cmd == 'status':
-        msg = "gammu, gammu-check, smsutil信息"
+        msg = get_sms_process_info()
         logging.info(msg)
         bot.sendMessage(chat_id=update.message.chat_id, text=msg)
     elif cmd == 'reboot':
