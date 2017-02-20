@@ -14,8 +14,7 @@ from smsutil import SMS_CHECKER
 def logging_config(loggingfile):
     # configure logging, log data will be store with the same name.log under the same folder.
 
-    FORMAT = '%(asctime)-15s %(name)s %(levelname)s: %(message)s'
-    # logging.basicConfig(level=logging.INFO,filename=loggingfile, format=FORMAT)
+    FORMAT = '%(asctime)-15s %(filename)s %(lineno)d %(message)s'
     if loggingfile:
         logging.basicConfig(level=logging.DEBUG, filename=loggingfile, format=FORMAT)
         print('Logging file for is: %s' % loggingfile)
