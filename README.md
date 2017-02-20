@@ -6,3 +6,6 @@
 
 # 问题
 短信的目录目前为hardcode.
+
+## Todo:
+bot send status and execute restart
