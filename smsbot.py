@@ -46,7 +46,7 @@ def help(bot, update):
     message = update.message
     msg = "命令：\n"
     msg += "%s %s\n" %("/help", "查看帮助信息")
-    msg += "%s %s\n" %("name", "查看状态信息")
+    msg += "%s %s\n" %("name", "查看bot名")
     msg += "%s %s\n" %("status", "查看状态信息")
     msg += "%s %s\n" %("reboot pi", "重启raspberry pi")
     bot.sendMessage(chat_id=message.chat_id, text=msg)
@@ -96,8 +96,9 @@ def message_reactor(bot, update):
 
 
 def get_bot_name(bot, update):
-    logging.info(update.message.text)
-    bot.sendMessage(chat_id=update.message.chat_id, text=str(bot.get_me()))
+    name = str(bot.get_me())
+    logging.info("%s: %s" % (update.message.text,name))
+    bot.sendMessage(chat_id=update.message.chat_id, text=name)
 
 
 class Bot:
