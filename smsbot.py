@@ -10,7 +10,7 @@ import requests
 from config import TOKEN, CHAT_ID
 from sms_monitor import loop
 import sys
-from sysutil import get_sms_process_info
+from sysutil import get_sms_process_info, reboot
 
 # Todo: doesn't work under main function
 logging.basicConfig(format="%(asctime)-15s %(filename)s %(message)s",level=logging.INFO)
@@ -89,6 +89,14 @@ def message_reactor(bot, update):
         msg = "重启raspberry pi"
         logging.info(msg)
         bot.sendMessage(chat_id=update.message.chat_id, text=msg)
+        result =  reboot() # reboot machine
+
+        if not result == 0:
+            # 执行命令直接返回错误
+            msg = "重启raspberry pi失败"
+            bot.sendMessage(chat_id=update.message.chat_id, text=msg)
+            return
+        # 如果成功重启，一下命令不会被执行
         sleep(5)
         msg = "重启raspberry pi失败"
         bot.sendMessage(chat_id=update.message.chat_id, text=msg)

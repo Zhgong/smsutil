@@ -2,7 +2,7 @@ import subprocess
 
 
 def reboot():
-    res = subprocess.check_call("sudo reboot")
+    res = subprocess.check_call("sudo reboot", stderr=subprocess.STDOUT, shell=True)
     return res
 
 def get_process_info(name):
