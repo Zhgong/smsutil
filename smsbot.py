@@ -12,7 +12,7 @@ from sms_monitor import loop
 import sys
 
 # Todo: doesn't work under main function
-logging.basicConfig(format="%(asctime)-15s %(filename)s %(message)s",level=logging.DEBUG)
+logging.basicConfig(format="%(asctime)-15s %(filename)s %(message)s",level=logging.INFO)
 
 ALLOWED_ID =CHAT_ID# chat_id of 01726060309
 

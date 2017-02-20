@@ -28,7 +28,7 @@ def sendSmsTelegram(text):
     bot = telegram.Bot(token=token)
     chat_id = config.CHAT_ID
     bot.sendMessage(chat_id=chat_id, text=text)
-    logging.debug('SMS sent to telegram')
+    logging.info('SMS sent to telegram')
 
 def main(sms_checker):
     all_sms = sms_checker.get_sms()
@@ -37,7 +37,7 @@ def main(sms_checker):
         # print('No new messages', end='\r')
         return
 
-    logging.debug('%d Message in inbox:\n%s' %(len(all_sms), all_sms))
+    logging.info('%d Message in inbox:\n%s' %(len(all_sms), all_sms))
 
     sent_sms = []
     for s in all_sms:
@@ -49,7 +49,7 @@ def main(sms_checker):
         except Exception as e:
             err_info = 'error while getting %s. %s'%(s, e)
             print(err_info)
-            logging.debug(err_info)
+            logging.info(err_info)
             sendSmsTelegram(err_info)
             exit(1)
         sendSmsTelegram(text)
@@ -59,7 +59,7 @@ def main(sms_checker):
 
 
 def loop(break_time):
-    logging.debug('Starting main loop')
+    logging.info('Starting main loop')
     sendSmsTelegram('SMS service started ..')
     sms_checker = SMS_CHECKER()
     while True:
@@ -72,6 +72,6 @@ if __name__ == '__main__':
     else:
         loggingfile = ''
     logging_config(loggingfile)
-    logging.debug('Script: %s init finished'% sys.argv[0])
+    logging.info('Script: %s init finished'% sys.argv[0])
     loop(0.5)
 

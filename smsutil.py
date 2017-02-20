@@ -20,11 +20,11 @@ class SMS_CHECKER:
         self.inbox_files = abs_files.copy()
         self.inbox_files.sort()
         if self.inbox_files:
-            logging.debug("inbox_files: %s" % self.inbox_files)
+            logging.info("inbox_files: %s" % self.inbox_files)
 
     def _move_to_archieve(self, file):
         if not os.path.exists(file):
-            logging.debug("file '%s' is not exists." % file)
+            logging.info("file '%s' is not exists." % file)
             return
 
         # check if file is already exists in archieve
@@ -59,7 +59,7 @@ class SMS_CHECKER:
         if not files:
             return
 
-        logging.debug("Archieving files: %s" % files)
+        logging.info("Archieving files: %s" % files)
         for f in files:
             self._move_to_archieve(f)
 
@@ -78,11 +78,11 @@ def get_sms_from_file(file):
         sms = '时间: ' + date_time + '\n'
         sms = sms + '来自: ' + sender + '\n'
     except Exception as e:
-        logging.debug('Error while getting time and sender: %s' % e)
+        logging.info('Error while getting time and sender: %s' % e)
         exit(1)
 
     # open file with 'utf-16' encoding
-    logging.debug('Opening file with %s format.' % encoding)
+    logging.info('Opening file with %s format.' % encoding)
 
     with open(file, encoding=encoding) as f:
         text = f.readlines()
