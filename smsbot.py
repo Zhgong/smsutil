@@ -10,7 +10,7 @@ import requests
 from config import TOKEN, CHAT_ID
 from sms_monitor import loop
 import sys
-from sysutil import get_sms_process_info, reboot
+from syscmd import get_sms_process_info, reboot
 
 # Todo: doesn't work under main function
 logging.basicConfig(format="%(asctime)-15s %(filename)s %(message)s",level=logging.INFO)
