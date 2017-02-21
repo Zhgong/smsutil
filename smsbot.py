@@ -120,6 +120,7 @@ class Bot:
             'is_network_ok': False,
             'is_network_ok_last_time': False,
                        }
+        self.init = False
 
     def main(self):
 
@@ -143,7 +144,7 @@ class Bot:
         updater.start_polling()
 
         # network works well
-        # self.check_network_loop()
+        self.check_network_loop()
 
     def check_network(self):
         self.status['is_network_ok_last_time'] = self.status['is_network_ok']
@@ -162,8 +163,11 @@ class Bot:
     def check_network_loop(self):
         while True:
             self.check_network()
-            if self.status['is_network_ok'] and not self.status['is_network_ok_last_time']:
-                sendMsgTelegram('短信转发程序在线')
+            if self.init:
+                if self.status['is_network_ok'] and not self.status['is_network_ok_last_time']:
+                    sendMsgTelegram('短信转发程序网络OK')
+            else:
+                self.init = True
             sleep(5)
 
 if __name__ == '__main__':
@@ -182,6 +186,5 @@ if __name__ == '__main__':
     msg_bot = Bot(token=TOKEN)
     msg_bot.main()
 
-    print("working ...")
     sms_monitor_thread.join()
     print("exit")
