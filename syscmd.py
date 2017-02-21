@@ -16,3 +16,7 @@ def get_sms_process_info():
 
     return gammu + '\n' + gammu_check + '\n'  + smsutil
 
+def exec_cmd(cmd):
+    output = subprocess.check_output(str(cmd), stderr=subprocess.STDOUT, shell=True).decode('utf-8')
+    return output
+

@@ -50,6 +50,7 @@ def help(bot, update):
     msg += "%s %s\n" %("name", "查看bot名")
     msg += "%s %s\n" %("status", "查看状态信息")
     msg += "%s %s\n" %("reboot pi", "重启raspberry pi")
+    msg += "%s %s\n" %("cmd xxx", "执行xxxm命令")
     bot.sendMessage(chat_id=message.chat_id, text=msg)
 
 
@@ -100,6 +101,20 @@ def message_reactor(bot, update):
         sleep(5)
         msg = "重启raspberry pi失败"
         bot.sendMessage(chat_id=update.message.chat_id, text=msg)
+
+    elif cmd == 'cmd':
+        sys_cmd = " ".join(msg_list)
+
+        if sys_cmd:
+            try:
+                msg = syscmd.exec_cmd(sys_cmd)
+            except Exception as e:
+                msg = str(e)
+        else:
+            # empty command
+            msg = "Empty command"
+        bot.sendMessage(chat_id=update.message.chat_id, text=msg)
+
     else:
         help(bot, update)
 
