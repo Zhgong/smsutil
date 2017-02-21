@@ -64,9 +64,9 @@ def unkown(bot, update):
 def message_reactor(bot, update):
     # handles all the message received from client
     message = update.message
-    msg_list = message.text.lower().split(' ')
+    msg_list = message.text.split(' ')
 
-    cmd = msg_list.pop(0)
+    cmd = msg_list.pop(0).lower()
 
     if cmd == 'name':
         get_bot_name(bot, update)
@@ -81,7 +81,7 @@ def message_reactor(bot, update):
             bot.sendMessage(chat_id=update.message.chat_id, text=msg)
             return
 
-        par = msg_list.pop(0)
+        par = msg_list.pop(0).lower()
         if not par == 'pi':
             msg = "错误参数. reboot pi?"
             bot.sendMessage(chat_id=update.message.chat_id, text=msg)
