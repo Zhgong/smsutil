@@ -84,10 +84,14 @@ def get_sms_from_file(file):
     # open file with 'utf-16' encoding
     logging.info('Opening file with %s format.' % encoding)
 
-    with open(file, encoding=encoding) as f:
-        text = f.readlines()
-    sms += "".join(text)
-    return sms
+    try:
+        with open(file, encoding=encoding) as f:
+            text = f.readlines()
+        sms += "".join(text)
+        return sms
+    except Exception as e:
+        logging.info('Error while getting sms content: %s' % e)
+        exit(1)
 
 
 def get_time_sender(file):

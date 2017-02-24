@@ -54,7 +54,7 @@ def main(sms_checker):
             logging.info(err_info)
             sendSmsTelegram(err_info)
             # should it be an break?
-            exit(1)
+            break
     sms_checker.archieve(sent_sms)
 
 
