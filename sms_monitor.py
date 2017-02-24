@@ -46,15 +46,15 @@ def main(sms_checker):
             print(text)
             logging.info(s.get('file', ''))
             logging.info('\n' + text)
+            sendSmsTelegram(text)
+            sent_sms.append(s) # append the sms file to list will be achieved later
         except Exception as e:
             err_info = 'error while getting %s. %s'%(s, e)
             print(err_info)
             logging.info(err_info)
             sendSmsTelegram(err_info)
+            # should it be an break?
             exit(1)
-        sendSmsTelegram(text)
-
-        sent_sms.append(s)
     sms_checker.archieve(sent_sms)
 
 
