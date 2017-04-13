@@ -7,7 +7,7 @@ import time
 
 import config # import config file
 
-from smsutil import SMS_CHECKER
+from smschecker import SMS_CHECKER
 
 
 # Copied from antoher as template, needs to be adapted
