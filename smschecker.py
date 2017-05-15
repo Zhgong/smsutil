@@ -5,6 +5,14 @@ import logging
 import re
 import shutil
 
+class SMS:
+    def __init__(self, file, text):
+        self.file = file
+        self.text = text
+
+    def __str__(self):
+        return self.file
+
 
 class SMS_CHECKER:
     def __init__(self):
@@ -45,16 +53,19 @@ class SMS_CHECKER:
         if not self.inbox_files:
             return []
 
-        tmp_sms = dict()
+        # tmp_sms = dict()
         for f in self.inbox_files:
-            tmp_sms['file'] = f
-            tmp_sms['text'] = get_sms_from_file(f)
-            sms.append(tmp_sms.copy())
+            # tmp_sms['file'] = f
+            # tmp_sms['text'] = get_sms_from_file(f)
+            # sms.append(tmp_sms.copy())
+            sms_obj = SMS(f,get_sms_from_file(f))
+            sms.append(sms_obj)
 
         return sms
 
     def archieve(self,sms_list=[]):
-        files = [i.get('file', '') for i in sms_list]
+        # files = [i.get('file', '') for i in sms_list]
+        files = [i.file for i in sms_list]
 
         if not files:
             return

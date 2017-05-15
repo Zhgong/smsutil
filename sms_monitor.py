@@ -42,9 +42,11 @@ def main(sms_checker):
     sent_sms = []
     for s in all_sms:
         try:
-            text = s.get('text', '')
+            # text = s.get('text', '')
+            text = s.text
             print(text)
-            logging.info(s.get('file', ''))
+            # logging.info(s.get('file', ''))
+            logging.info(s.file)
             logging.info('\n' + text)
             sendSmsTelegram(text)
             sent_sms.append(s) # append the sms file to list will be achieved later
