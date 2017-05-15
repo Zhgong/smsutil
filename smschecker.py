@@ -89,8 +89,9 @@ def get_sms_from_file(file):
         sms = '时间: ' + date_time + '\n'
         sms = sms + '来自: ' + sender + '\n'
     except Exception as e:
-        logging.info('Error while getting time and sender: %s' % e)
-        exit(1)
+        error_msg = 'Error while getting time and sender. File %s. %s' % (file,e)
+        logging.info(error_msg)
+        return error_msg
 
     # open file with 'utf-16' encoding
     logging.info('Opening file with %s format.' % encoding)
@@ -101,8 +102,9 @@ def get_sms_from_file(file):
         sms += "".join(text)
         return sms
     except Exception as e:
-        logging.info('Error while getting sms content: %s' % e)
-        exit(1)
+        error_msg = 'Error while getting sms content. File:%s. content: %s' % (file, e)
+        logging.info(error_msg)
+        return error_msg
 
 
 def get_time_sender(file):
