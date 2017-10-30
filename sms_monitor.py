@@ -30,7 +30,7 @@ def send_sms_via_telegram(text):
     bot.sendMessage(chat_id=chat_id, text=text)
     logging.info('SMS sent to telegram')
 
-def main(sms_checker):
+def send_all_incoming_sms(sms_checker):
     all_sms = sms_checker.get_sms()
 
     if not all_sms:
@@ -65,7 +65,7 @@ def loop(break_time):
     send_sms_via_telegram('SMS service started ..')
     sms_checker = SMS_CHECKER()
     while True:
-        main(sms_checker)
+        send_all_incoming_sms(sms_checker)
         time.sleep(break_time)
 
 if __name__ == '__main__':
