@@ -22,7 +22,7 @@ def logging_config(loggingfile):
         logging.basicConfig(level=logging.DEBUG, format=FORMAT)
 
 
-def sendSmsTelegram(text):
+def send_sms_via_telegram(text):
     # send text to telegram
     token = config.TOKEN
     bot = telegram.Bot(token=token)
@@ -48,13 +48,13 @@ def main(sms_checker):
             # logging.info(s.get('file', ''))
             logging.info(s.file)
             logging.info('\n' + text)
-            sendSmsTelegram(text)
+            send_sms_via_telegram(text)
             sent_sms.append(s) # append the sms file to list will be achieved later
         except Exception as e:
             err_info = 'error while getting %s. %s'%(s, e)
             print(err_info)
             logging.info(err_info)
-            sendSmsTelegram(err_info)
+            send_sms_via_telegram(err_info)
             # should it be an break?
             break
     sms_checker.archieve(sent_sms)
@@ -62,7 +62,7 @@ def main(sms_checker):
 
 def loop(break_time):
     logging.info('Starting main loop')
-    sendSmsTelegram('SMS service started ..')
+    send_sms_via_telegram('SMS service started ..')
     sms_checker = SMS_CHECKER()
     while True:
         main(sms_checker)

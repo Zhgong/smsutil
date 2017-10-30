@@ -9,7 +9,6 @@ import telegram
 import requests
 from config import TOKEN, CHAT_ID
 from sms_monitor import loop
-import sys
 import syscmd
 
 # Todo: doesn't work under main function
@@ -185,14 +184,8 @@ class Bot:
                 self.init = True
             sleep(5)
 
-if __name__ == '__main__':
-    # print("start program")
-    # if len(sys.argv) == 2:
-    #     loggingfile = sys.argv[1]
-    # else:
-    #     loggingfile = ''
-    # logging_config(loggingfile)
 
+if __name__ == '__main__':
     print("start sms_monitor_thread")
     sms_monitor_thread = threading.Thread(target=loop, args=(0.5,))  # create a new thread
     sms_monitor_thread.start()  # start the thread

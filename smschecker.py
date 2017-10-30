@@ -55,9 +55,6 @@ class SMS_CHECKER:
 
         # tmp_sms = dict()
         for f in self.inbox_files:
-            # tmp_sms['file'] = f
-            # tmp_sms['text'] = get_sms_from_file(f)
-            # sms.append(tmp_sms.copy())
             sms_obj = SMS(f,get_sms_from_file(f))
             sms.append(sms_obj)
 
