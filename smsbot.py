@@ -8,7 +8,7 @@ import threading
 import telegram
 import requests
 from config import TOKEN, CHAT_ID
-from sms_monitor import loop
+from sms_forwarder import SmsForworder
 import syscmd
 
 # Todo: doesn't work under main function
@@ -187,12 +187,13 @@ class Bot:
 
 if __name__ == '__main__':
     print("start sms_monitor_thread")
-    sms_monitor_thread = threading.Thread(target=loop, args=(0.5,))  # create a new thread
-    sms_monitor_thread.start()  # start the thread
+    sms_forworder = SmsForworder()
+    sms_forward_thread = threading.Thread(target=sms_forworder.loop, args=(0.5,))  # create a new thread
+    sms_forward_thread.start()  # start the thread
 
     print("start msg_bot")
     msg_bot = Bot(token=TOKEN)
     msg_bot.main()
 
-    sms_monitor_thread.join()
+    sms_forward_thread.join()
     print("exit")
