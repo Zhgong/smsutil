@@ -188,12 +188,11 @@ class Bot:
 if __name__ == '__main__':
     print("start sms_monitor_thread")
     sms_forworder = SmsForworder()
-    sms_forward_thread = threading.Thread(target=sms_forworder.loop, args=(0.5,))  # create a new thread
-    sms_forward_thread.start()  # start the thread
+    sms_forworder.start_daemon()
 
     print("start msg_bot")
     msg_bot = Bot(token=TOKEN)
     msg_bot.main()
 
-    sms_forward_thread.join()
+    sms_forworder._daemon_thread.join()
     print("exit")

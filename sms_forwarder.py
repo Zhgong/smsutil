@@ -4,6 +4,7 @@ import sys
 import telegram
 import logging
 import time
+import threading
 
 import config # import config file
 
@@ -24,17 +25,18 @@ def logging_config(loggingfile):
 
 class SmsForworder:
     def __init__(self):
-        self.bot = telegram.Bot(token=config.TOKEN)
-        self.chat_id = config.CHAT_ID
-        self.sms_checker = SMS_CHECKER()
+        self._bot = telegram.Bot(token=config.TOKEN)
+        self._chat_id = config.CHAT_ID
+        self._sms_checker = SMS_CHECKER()
+        self._daemon_thread = None
 
     def send_sms_via_telegram(self, text):
         # send text to telegram
-        self.bot.sendMessage(chat_id=self.chat_id, text=text)
+        self._bot.sendMessage(chat_id=self._chat_id, text=text)
         logging.info('SMS sent to telegram')
 
     def send_all_incoming_sms(self):
-        all_sms = self.sms_checker.get_sms()
+        all_sms = self._sms_checker.get_sms()
 
         if not all_sms:
             # print('No new messages', end='\r')
@@ -60,7 +62,7 @@ class SmsForworder:
                 self.send_sms_via_telegram(err_info)
                 # should it be an break?
                 break
-        self.sms_checker.archieve(sent_sms)
+        self._sms_checker.archieve(sent_sms)
 
     def loop(self, interval):
         logging.info('Starting main loop')
@@ -69,6 +71,17 @@ class SmsForworder:
             self.send_all_incoming_sms()
             time.sleep(interval)
 
+    def start_daemon(self, interval=0.5):
+        try:
+            thread_is_alive = self._daemon_thread.is_alive()
+        except:
+            thread_is_alive = False
+
+        if thread_is_alive:
+            self.send_sms_via_telegram("SMS转发已经运行中!")
+        else:
+            self._daemon_thread = threading.Thread(target=self.loop, args=(interval,))
+            self._daemon_thread.start()
 
 if __name__ == '__main__':
     if len(sys.argv) == 2:
