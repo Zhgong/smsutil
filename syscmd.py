@@ -1,4 +1,5 @@
 import subprocess
+import threading
 
 
 def reboot():
@@ -19,4 +20,16 @@ def get_sms_process_info():
 def exec_cmd(cmd):
     output = subprocess.check_output(str(cmd), stderr=subprocess.STDOUT, shell=True).decode('utf-8')
     return output
+
+def get_daemon_info(thread):
+    if isinstance(thread, threading.Thread):
+        return thread.getName()
+    else:
+        return "No thread name."
+
+def get_status(thread):
+    process_info = get_sms_process_info()
+    daemon_info = get_daemon_info(thread)
+
+    return process_info + '/n' + daemon_info
 

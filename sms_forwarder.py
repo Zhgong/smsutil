@@ -81,6 +81,7 @@ class SmsForworder:
             self.send_sms_via_telegram("SMS转发已经运行中!")
         else:
             self._daemon_thread = threading.Thread(target=self.loop, args=(interval,))
+            self._daemon_thread.setName("SMS Forwarder")
             self._daemon_thread.start()
 
 if __name__ == '__main__':
