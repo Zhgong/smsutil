@@ -1,15 +1,16 @@
 # coding=utf-8
-from telegram.ext import Updater
 import logging
+import threading
+from time import sleep
+
+import requests
+import telegram
 from telegram.ext import CommandHandler
 from telegram.ext import MessageHandler, Filters
-from time import sleep
-import threading
-import telegram
-import requests
+from telegram.ext import Updater
+
 from config import TOKEN, CHAT_ID
-from sms_forwarder import SmsForworder
-import syscmd
+from smsutil import syscmd
 
 # Todo: doesn't work under main function
 logging.basicConfig(format="%(asctime)-15s %(filename)s %(message)s",level=logging.INFO)
@@ -211,13 +212,10 @@ class Bot:
 if __name__ == '__main__':
 
     print("start sms_monitor_thread")
-    sms_forworder = SmsForworder()
-    sms_forworder.start_daemon()
 
     print("start msg_bot")
     msg_bot = Bot(token=TOKEN)
     msg_bot.start()
 
-    sms_forworder._daemon_thread.join()
     msg_bot._daemon_thread.join()
     print("exit")

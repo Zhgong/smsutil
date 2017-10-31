@@ -1,5 +1,6 @@
-from sms_forwarder import SmsForworder
-from smsbot import Bot
+from smsutil import Bot
+from smsutil import SmsForworder
+
 from config import TOKEN
 
 if __name__ == '__main__':

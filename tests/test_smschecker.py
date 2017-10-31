@@ -1,6 +1,6 @@
-from smschecker import get_time_sender, get_sms_from_file
-import shutil
 import os
+
+from smsutil.smschecker import get_time_sender, get_sms_from_file
 
 
 def test_get_time_sender():

@@ -1,14 +1,15 @@
 #!/usr/bin/python3
 from __future__ import print_function
-import sys
-import telegram
+
 import logging
-import time
+import sys
 import threading
+import time
 
-import config # import config file
+import telegram
 
-from smschecker import SMS_CHECKER
+import config  # import config file
+from smsutil.smschecker import SMS_CHECKER
 
 
 # Copied from antoher as template, needs to be adapted
