@@ -12,8 +12,6 @@ from telegram.ext import Updater
 from config import TOKEN, CHAT_ID
 from smsutil import syscmd
 
-# Todo: doesn't work under main function
-logging.basicConfig(format="%(asctime)-15s %(filename)s %(message)s",level=logging.INFO)
 
 ALLOWED_ID =CHAT_ID# chat_id of 01726060309
 
@@ -205,7 +203,7 @@ class Bot:
         if thread_is_alive:
             self.send_sms_via_telegram("Check network has already been started!")
         else:
-            self._daemon_thread = threading.Thread(target=self.check_network_loop(), args=())
+            self._daemon_thread = threading.Thread(target=self.check_network_loop, args=())
             self._daemon_thread.setName("Check network")
             self._daemon_thread.start()
 

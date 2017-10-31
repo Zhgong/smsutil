@@ -72,6 +72,8 @@ class SMS_CHECKER:
             self._move_to_archieve(f)
 
 
+
+
 def get_sms_from_file(file):
     # output:
     # 时间: 2015.10.10 09:01:33

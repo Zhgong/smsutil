@@ -1,7 +1,10 @@
 from smsutil import Bot
 from smsutil import SmsForworder
+import logging
 
 from config import TOKEN
+
+logging.basicConfig(format="%(asctime)-15s %(filename)s %(message)s",level=logging.INFO)
 
 if __name__ == '__main__':
 
