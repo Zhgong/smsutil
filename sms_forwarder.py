@@ -66,7 +66,7 @@ class SmsForworder:
 
     def loop(self, interval):
         logging.info('Starting main loop')
-        self.send_sms_via_telegram('SMS service started ..')
+        self.send_sms_via_telegram('SMS转发服务开启...')
         while True:
             self.send_all_incoming_sms()
             time.sleep(interval)

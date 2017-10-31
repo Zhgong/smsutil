@@ -127,7 +127,6 @@ def get_bot_name(bot, update):
 class Bot:
     def __init__(self, token):
         self.token = token
-        self.bot = telegram.Bot(token=token)
         self.is_network_ok = False
         self.is_network_ok_last_time = False
         self.status = {
@@ -136,8 +135,19 @@ class Bot:
                        }
         self.init = False
 
+        # create telegram bot
+        self._bot = telegram.Bot(token=token)
+        self._chat_id = ALLOWED_ID
+
     def main(self):
 
+        self.start_updater()
+
+        # network works well
+        # todo: non-blocking
+        self.check_network_loop()
+
+    def start_updater(self):
         updater = Updater(token=self.token)
 
         dispatcher = updater.dispatcher
@@ -156,9 +166,6 @@ class Bot:
 
         logging.info("Start polling in bot")
         updater.start_polling()
-
-        # network works well
-        self.check_network_loop()
 
     def check_network(self):
         self.status['is_network_ok_last_time'] = self.status['is_network_ok']
@@ -179,13 +186,17 @@ class Bot:
             self.check_network()
             if self.init:
                 if self.status['is_network_ok'] and not self.status['is_network_ok_last_time']:
-                    sendMsgTelegram('短信转发程序网络OK')
+                    self.send_sms_via_telegram('短信转发程序网络OK')
             else:
                 self.init = True
             sleep(5)
 
+    def send_sms_via_telegram(self, text):
+        # send text to telegram
+        self._bot.sendMessage(chat_id=self._chat_id, text=text)
 
 if __name__ == '__main__':
+
     print("start sms_monitor_thread")
     sms_forworder = SmsForworder()
     sms_forworder.start_daemon()
