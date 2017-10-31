@@ -138,14 +138,14 @@ class Bot:
         # create telegram bot
         self._bot = telegram.Bot(token=token)
         self._chat_id = ALLOWED_ID
+        self._daemon_thread = None
 
-    def main(self):
+    def start(self):
 
         self.start_updater()
 
         # network works well
-        # todo: non-blocking
-        self.check_network_loop()
+        self.start_check_loop_daemon()
 
     def start_updater(self):
         updater = Updater(token=self.token)
@@ -195,6 +195,19 @@ class Bot:
         # send text to telegram
         self._bot.sendMessage(chat_id=self._chat_id, text=text)
 
+    def start_check_loop_daemon(self):
+        try:
+            thread_is_alive = self._daemon_thread.is_alive()
+        except:
+            thread_is_alive = False
+
+        if thread_is_alive:
+            self.send_sms_via_telegram("Check network has already been started!")
+        else:
+            self._daemon_thread = threading.Thread(target=self.check_network_loop(), args=())
+            self._daemon_thread.setName("Check network")
+            self._daemon_thread.start()
+
 if __name__ == '__main__':
 
     print("start sms_monitor_thread")
@@ -203,7 +216,8 @@ if __name__ == '__main__':
 
     print("start msg_bot")
     msg_bot = Bot(token=TOKEN)
-    msg_bot.main()
+    msg_bot.start()
 
     sms_forworder._daemon_thread.join()
+    msg_bot._daemon_thread.join()
     print("exit")

@@ -10,7 +10,7 @@
 ### END INIT INFO
 
 DIR=/home/pi/smsutil
-SCRIPT=smsbot.py
+SCRIPT=main.py
 DAEMON=$DIR/$SCRIPT
 DAEMON_NAME=smsutil
 LOGFILE=/var/log/$DAEMON_NAME.log
