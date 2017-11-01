@@ -11,34 +11,10 @@ from telegram.ext import Updater
 
 from config import TOKEN, CHAT_ID
 from smsutil import syscmd
+from .utils import authorize
 
 
 ALLOWED_ID =CHAT_ID# chat_id of 01726060309
-
-def sendMsgTelegram(text):
-    # send text to telegram
-    token = TOKEN
-    bot = telegram.Bot(token=token)
-    chat_id = ALLOWED_ID
-    bot.sendMessage(chat_id=chat_id, text=text)
-
-def authorize(allowed_id):
-    logging.info("Authorize: %s" % allowed_id)
-
-    # function decorator
-    def func_deco(func):
-        logging.info("Wrapper Decorating function: %s" % func.__name__)
-
-        # function wrapper
-        def check_id(bot, update, *args, **kwargs):
-            message = update.message
-            chat_id = message.chat_id
-            if chat_id == allowed_id:
-                func(bot, update, *args, **kwargs)
-            else:
-                bot.sendMessage(chat_id=message.chat_id, text="Do I know you?")
-        return check_id
-    return func_deco
 
 @authorize(ALLOWED_ID)
 def help(bot, update):
