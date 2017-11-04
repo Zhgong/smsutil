@@ -33,5 +33,7 @@ def get_status(thread):
 
     return process_info + '/n' + daemon_info
 
-
+def get_bot_name(bot, update):
+    name = str(bot.get_me())
+    return name
 

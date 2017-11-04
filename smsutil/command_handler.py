@@ -1,11 +1,7 @@
 import logging
-from smsutil import syscmd
+from smsutil import cmd
 from time import sleep
 
-def get_bot_name(bot, update):
-    name = str(bot.get_me())
-    logging.info("%s: %s" % (update.message.text,name))
-    bot.sendMessage(chat_id=update.message.chat_id, text=name)
 
 class CommandHandler:
     def __init__(self, message=None):
@@ -17,10 +13,12 @@ class CommandHandler:
         cmd = msg_list.pop(0).lower()
 
         if cmd == 'name':
-            get_bot_name(telegram_bot, telegram_update)
+            msg = cmd.get_bot_name(telegram_bot, telegram_update)
+            logging.info("%s: %s" % (telegram_update.message.text,msg))
+            telegram_bot.sendMessage(chat_id=telegram_update.message.chat_id, text=msg)
 
         elif cmd == 'status':
-            msg = syscmd.get_sms_process_info()
+            msg = cmd.get_sms_process_info()
             logging.info(msg)
             telegram_bot.sendMessage(chat_id=telegram_update.message.chat_id, text=msg)
         elif cmd == 'reboot':
@@ -38,7 +36,7 @@ class CommandHandler:
             msg = "重启raspberry pi"
             logging.info(msg)
             telegram_bot.sendMessage(chat_id=telegram_update.message.chat_id, text=msg)
-            result =  syscmd.reboot() # reboot machine
+            result =  cmd.reboot() # reboot machine
 
             if not result == 0:
                 # 执行命令直接返回错误
@@ -55,7 +53,7 @@ class CommandHandler:
 
             if sys_cmd:
                 try:
-                    msg = syscmd.exec_cmd(sys_cmd)
+                    msg = cmd.exec_cmd(sys_cmd)
                 except Exception as e:
                     msg = str(e)
             else:
