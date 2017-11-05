@@ -34,8 +34,8 @@ def unkown(telegram_bot, telegram_update):
 def message_reactor(telegram_bot, telegram_update):
     # handles all the message received from client
     message = telegram_update.message
-    cmd = CommandMiddleWare(message)
-    cmd.execute(telegram_bot, telegram_update)
+    cmd = CommandMiddleWare(message, telegram_bot, telegram_update)
+    cmd.execute()
 
 
 class Bot:
