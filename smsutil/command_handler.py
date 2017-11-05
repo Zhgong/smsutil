@@ -3,25 +3,25 @@ from smsutil import cmd
 from time import sleep
 
 
-class CommandHandler:
+class CommandMiddleWare:
     def __init__(self, message=None):
         self.message = message
 
     def execute(self,telegram_bot, telegram_update):
         msg_list = self.message.text.split(' ')
 
-        cmd = msg_list.pop(0).lower()
+        msg_cmd = msg_list.pop(0).lower()
 
-        if cmd == 'name':
+        if msg_cmd == 'name':
             msg = cmd.get_bot_name(telegram_bot, telegram_update)
             logging.info("%s: %s" % (telegram_update.message.text,msg))
             telegram_bot.sendMessage(chat_id=telegram_update.message.chat_id, text=msg)
 
-        elif cmd == 'status':
+        elif msg_cmd == 'status':
             msg = cmd.get_sms_process_info()
             logging.info(msg)
             telegram_bot.sendMessage(chat_id=telegram_update.message.chat_id, text=msg)
-        elif cmd == 'reboot':
+        elif msg_cmd == 'reboot':
             if not msg_list:
                 msg = "缺少参数. reboot pi?"
                 telegram_bot.sendMessage(chat_id=telegram_update.message.chat_id, text=msg)
@@ -48,7 +48,7 @@ class CommandHandler:
             msg = "重启raspberry pi失败"
             telegram_bot.sendMessage(chat_id=telegram_update.message.chat_id, text=msg)
 
-        elif cmd == 'cmd':
+        elif msg_cmd == 'cmd':
             sys_cmd = " ".join(msg_list)
 
             if sys_cmd:
@@ -62,4 +62,5 @@ class CommandHandler:
             telegram_bot.sendMessage(chat_id=telegram_update.message.chat_id, text=msg)
 
         else:
-            help(telegram_bot, telegram_update)
+            msg = cmd.get_help_msg()
+            telegram_bot.sendMessage(chat_id=telegram_update.message.chat_id, text=msg)

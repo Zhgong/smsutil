@@ -37,3 +37,12 @@ def get_bot_name(bot, update):
     name = str(bot.get_me())
     return name
 
+
+def get_help_msg():
+    msg = "命令：\n"
+    msg += "%s %s\n" %("/help", "查看帮助信息")
+    msg += "%s %s\n" %("name", "查看bot名")
+    msg += "%s %s\n" %("status", "查看状态信息")
+    msg += "%s %s\n" %("reboot pi", "重启raspberry pi")
+    msg += "%s %s\n" %("cmd xxx", "执行xxxm命令")
+    return msg

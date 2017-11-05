@@ -11,7 +11,8 @@ from telegram.ext import Updater
 
 from config import TOKEN, CHAT_ID
 from .utils import authorize
-from .command_handler import CommandHandler
+from .command_handler import CommandMiddleWare
+from smsutil import cmd
 
 
 ALLOWED_ID =CHAT_ID# chat_id of 01726060309
@@ -19,12 +20,7 @@ ALLOWED_ID =CHAT_ID# chat_id of 01726060309
 @authorize(ALLOWED_ID)
 def help(telegram_bot, telegram_update):
     message = telegram_update.message
-    msg = "命令：\n"
-    msg += "%s %s\n" %("/help", "查看帮助信息")
-    msg += "%s %s\n" %("name", "查看bot名")
-    msg += "%s %s\n" %("status", "查看状态信息")
-    msg += "%s %s\n" %("reboot pi", "重启raspberry pi")
-    msg += "%s %s\n" %("cmd xxx", "执行xxxm命令")
+    msg = cmd.get_help_msg()
     telegram_bot.sendMessage(chat_id=message.chat_id, text=msg)
 
 
@@ -38,8 +34,8 @@ def unkown(telegram_bot, telegram_update):
 def message_reactor(telegram_bot, telegram_update):
     # handles all the message received from client
     message = telegram_update.message
-    cmd = CommandHandler(message)
-    cmd.execute()
+    cmd = CommandMiddleWare(message)
+    cmd.execute(telegram_bot, telegram_update)
 
 
 class Bot:
