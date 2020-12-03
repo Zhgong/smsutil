@@ -95,3 +95,4 @@ ENV/
 archieve
 inbox
 config.py
+*.json
