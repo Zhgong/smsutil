@@ -4,6 +4,7 @@ import os
 import logging
 import re
 import shutil
+import config
 
 class SMS:
     def __init__(self, file, text):
@@ -16,8 +17,8 @@ class SMS:
 
 class SMS_CHECKER:
     def __init__(self):
-        self.inbox = '/var/spool/gammu/inbox/'
-        self.path_archieve = '/var/spool/gammu/archieve'
+        self.inbox = config.FOLDERS.get('inbox') or '/var/spool/gammu/inbox/'
+        self.path_archieve = config.FOLDERS.get('archieve') or '/var/spool/gammu/archieve'
 
     def _get_sms_inbox_list(self):
         files = os.listdir(self.inbox)
