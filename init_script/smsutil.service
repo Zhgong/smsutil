@@ -1,0 +1,15 @@
+
+[Unit]
+Description=sms utils
+After=network.target
+
+[Service]
+ExecStart=/home/pi/smsutil/v-env/bin/python -u main.py
+WorkingDirectory=/home/pi/smsutil
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+User=pi
+
+[Install]
+WantedBy=multi-user.target
