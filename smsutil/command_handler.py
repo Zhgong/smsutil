@@ -4,9 +4,9 @@ from time import sleep
 
 
 class CommandMiddleWare:
-    def __init__(self, message=None, telegram_bot=None, telegram_update=None):
+    def __init__(self, message=None, telegram_update=None, telegram_context=None):
         self.message = message
-        self.telegram_bot = telegram_bot
+        self.telegram_bot = telegram_context.bot
         self.telegram_update = telegram_update
         self.msg_list = None
         self.cmd_dict = dict()
@@ -16,11 +16,12 @@ class CommandMiddleWare:
         if not msg:
             # Empty message
             return
-        logging.info("%s: %s" % (self.telegram_update.message.text,msg))
-        self.telegram_bot.sendMessage(chat_id=self.telegram_update.message.chat_id, text=msg)
+        logging.info("%s: %s" % (self.telegram_update.message.text, msg))
+        self.telegram_bot.sendMessage(
+            chat_id=self.telegram_update.message.chat_id, text=msg)
 
     def execute_cmd(self):
-        msg = None # message to be returned
+        msg = None  # message to be returned
         self.msg_list = self.message.text.split(' ')
 
         msg_cmd = self.msg_list.pop(0).lower()
@@ -28,14 +29,14 @@ class CommandMiddleWare:
         temp_cmd = self.cmd_dict.get(msg_cmd)
 
         if temp_cmd:
-            msg=temp_cmd()
+            msg = temp_cmd()
         else:
             msg = cmd.get_help_msg()
         return msg
 
     def execute(self):
-            msg = self.execute_cmd()
-            self.send_message(msg)
+        msg = self.execute_cmd()
+        self.send_message(msg)
 
     def name_cmd(self):
         msg = cmd.get_bot_name(self.telegram_bot)
@@ -57,7 +58,7 @@ class CommandMiddleWare:
 
         msg = "重启raspberry pi"
         self.send_message(msg)
-        result =  cmd.reboot() # reboot machine
+        result = cmd.reboot()  # reboot machine
 
         if not result == 0:
             # 执行命令直接返回错误

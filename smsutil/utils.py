@@ -18,13 +18,13 @@ def authorize(allowed_id):
         logging.info("Wrapper Decorating function: %s" % func.__name__)
 
         # function wrapper
-        def check_id(bot, update, *args, **kwargs):
+        def check_id(update, context, *args, **kwargs):
             message = update.message
             chat_id = message.chat_id
             if chat_id == allowed_id:
-                func(bot, update, *args, **kwargs)
+                func(update, context, *args, **kwargs)
             else:
-                bot.sendMessage(chat_id=message.chat_id, text="Do I know you?")
+                context.bot.sendMessage(chat_id=message.chat_id, text="Do I know you?")
         return check_id
     return func_deco
 

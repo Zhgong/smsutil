@@ -18,23 +18,23 @@ from smsutil import cmd
 ALLOWED_ID =CHAT_ID# chat_id of 01726060309
 
 @authorize(ALLOWED_ID)
-def help(telegram_bot, telegram_update):
+def help(telegram_update, telegram_context):
     message = telegram_update.message
     msg = cmd.get_help_msg()
-    telegram_bot.sendMessage(chat_id=message.chat_id, text=msg)
+    telegram_context.bot.sendMessage(chat_id=message.chat_id, text=msg)
 
 
 @authorize(ALLOWED_ID)
-def unkown(telegram_bot, telegram_update):
+def unkown(telegram_update, telegram_context):
     message = telegram_update.message
-    telegram_bot.sendMessage(chat_id=message.chat_id, text="Unkown command")
-    help(telegram_bot, telegram_update)
+    telegram_context.bot.sendMessage(chat_id=message.chat_id, text="Unkown command")
+    help(telegram_update, telegram_context)
 
 @authorize(ALLOWED_ID)
-def message_reactor(telegram_bot, telegram_update):
+def message_reactor(telegram_update, telegram_context):
     # handles all the message received from client
     message = telegram_update.message
-    cmd = CommandMiddleWare(message, telegram_bot, telegram_update)
+    cmd = CommandMiddleWare(message, telegram_update, telegram_context)
     cmd.execute()
 
 
