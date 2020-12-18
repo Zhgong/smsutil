@@ -82,7 +82,7 @@ def get_sms_from_file(file):
     # 温馨提示：截止北京时间10月09日24时，您当日使用的国际漫游数据流量0.29MB、费用5.00元，本月累计使用国际漫游数据流量0
 
     sms = ''
-    encoding = 'utf-16'
+    encodings = [None, 'utf-16']
     # get time stamp and sender
     try:
         date_time, sender = get_time_sender(file)
@@ -93,18 +93,25 @@ def get_sms_from_file(file):
         logging.info(error_msg)
         return error_msg
 
-    # open file with 'utf-16' encoding
-    logging.info('Opening file with %s format.' % encoding)
+    
+    error_msg = ''
+    for encoding in encodings:
+        try:
+            # open file with 'utf-16' encoding
+            logging.info('Opening file with %s format.' % encoding)
 
-    try:
-        with open(file, encoding=encoding) as f:
-            text = f.readlines()
-        sms += "".join(text)
-        return sms
-    except Exception as e:
-        error_msg = 'Error while getting sms content. File:%s. content: %s' % (file, e)
-        logging.info(error_msg)
-        return error_msg
+            with open(file, encoding=encoding) as f:
+            # with open(file, encoding=None) as f:
+                text = f.readlines()
+            sms += "".join(text)
+            return sms
+        except Exception as e:
+            logging.info(f"Could not decode file with {encoding}")
+            error_msg = 'Error while getting sms content. File:%s. content: %s' % (file, e)
+
+    
+    logging.info(error_msg)
+    return error_msg
 
 
 def get_time_sender(file):

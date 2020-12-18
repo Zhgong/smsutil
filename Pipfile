@@ -7,6 +7,8 @@ name = "pypi"
 python-telegram-bot = "*"
 
 [dev-packages]
+pytest = "*"
+ipykernel = "*"
 
 [requires]
 python_version = "3.8"

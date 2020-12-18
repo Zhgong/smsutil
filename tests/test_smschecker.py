@@ -24,3 +24,9 @@ def test_get_sms_from_file():
         os.remove(tmp_file)
 
     assert ret == "时间: " + time + "\n" + "来自: " + sender + "\n" + content
+
+
+def test_get_sms_form_file_not_with_bom():
+    file = "tests/IN20201218_075552_00_10010_00.txt"
+    ret = get_sms_from_file(file)
+    assert not "error" in ret.lower()
